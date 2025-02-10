@@ -44,7 +44,7 @@ class Registration : AppCompatActivity() {
             insets
         }
 
-        // Initialize views
+        // Here we initialize the views
         fullnameEditText = findViewById(R.id.register_fullname)
         usernameEditText = findViewById(R.id.register_username)
         emailEditText = findViewById(R.id.register_email)
@@ -55,14 +55,13 @@ class Registration : AppCompatActivity() {
         loginLink = findViewById(R.id.register_login_link)
         messageTextView = findViewById(R.id.message_text_view)
 
-        // Set up the user type spinner
+        // Set up the user type for the register page
         val userTypes = arrayOf("", "Donor", "Recipient")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, userTypes)
         userTypeSpinner.adapter = adapter
 
-        // Set click listeners
+        // Here we set the click listeners
         registerButton.setOnClickListener {
-            // TODO: Implement Registration logic here
             val fullname = fullnameEditText.text.toString()
             val username = usernameEditText.text.toString()
             val email = emailEditText.text.toString()
@@ -70,14 +69,13 @@ class Registration : AppCompatActivity() {
             val confirmPassword = confirmPasswordEditText.text.toString()
             val userType = userTypeSpinner.selectedItem.toString()
 
-            //check if password and confirmpassword are the same.
+            //Here we check if password and confirm password are the same.
             if (password == confirmPassword) {
                 register(fullname,username, password, email, userType)
             } else {
                 showMessage("Passwords do not match")
                 Toast.makeText(this@Registration, "Passwords do not match", Toast.LENGTH_SHORT).show()
             }
-
         }
 
         loginLink.setOnClickListener {
@@ -105,12 +103,12 @@ class Registration : AppCompatActivity() {
                     val registerResponse = response.body()
                     if (registerResponse != null) {
                         if (!registerResponse.error) {
-                            // Registration successful
+                            // Registration is successful
                             val message = registerResponse.message
                             runOnUiThread {
                                 Toast.makeText(this@Registration, message, Toast.LENGTH_SHORT).show()
                                 showMessage(message)
-                                // Clear the input fields
+                                // Here we clear the input fields.
                                 fullnameEditText.text.clear()
                                 usernameEditText.text.clear()
                                 emailEditText.text.clear()
@@ -118,11 +116,11 @@ class Registration : AppCompatActivity() {
                                 confirmPasswordEditText.text.clear()
                                 userTypeSpinner.setSelection(0)
                             }
-                            // Navigate to the login activity or perform other actions
+                            // Here we navigate to the login activity
                             val intent = Intent(this@Registration, Login::class.java)
                             startActivity(intent)
                         } else {
-                            // Registration failed
+                            // Registration has failed
                             val message = registerResponse.message
                             runOnUiThread {
                                 Toast.makeText(this@Registration, message, Toast.LENGTH_SHORT).show()
@@ -131,7 +129,7 @@ class Registration : AppCompatActivity() {
                             Log.e("RegistrationActivity", "Registration failed: $message")
                         }
                     } else {
-                        // Handle null response body
+                        // Handle for null response
                         runOnUiThread {
                             Toast.makeText(this@Registration, "Registration failed: Empty response", Toast.LENGTH_SHORT).show()
                             showMessage("Registration failed: Empty response")
@@ -139,7 +137,7 @@ class Registration : AppCompatActivity() {
                         Log.e("RegistrationActivity", "Registration failed: Empty response")
                     }
                 } else {
-                    // Handle unsuccessful HTTP response
+                    // Handle for unsuccessful HTTP responses.
                     val message = response.message()
                     runOnUiThread {
                         Toast.makeText(this@Registration, "Registration failed: $message", Toast.LENGTH_SHORT).show()
@@ -150,7 +148,7 @@ class Registration : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                // Handle network errors
+                // Handle for network errors
                 val errorMessage = t.message ?: "Network error"
                 runOnUiThread {
                     Toast.makeText(this@Registration, "Registration failed: $errorMessage", Toast.LENGTH_SHORT).show()

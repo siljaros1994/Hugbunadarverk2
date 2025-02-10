@@ -37,19 +37,18 @@ class Login : AppCompatActivity() {
             insets
         }
 
-        // Initialize views
+        // Here we initialize the views
         emailEditText = findViewById(R.id.login_email)
         passwordEditText = findViewById(R.id.login_password)
         loginButton = findViewById(R.id.login_button)
         registerLink = findViewById(R.id.login_register_link)
         messageTextView = findViewById(R.id.message_text_view)
 
-        // Set click listeners
+        // Here we set the click listeners
         loginButton.setOnClickListener {
-            // TODO: Implement Login logic here
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
-            // Call the login function
+            // Here we call the login function
             login(email, password)
         }
 
@@ -77,35 +76,33 @@ class Login : AppCompatActivity() {
                                 showMessage(message)
                                 Log.d("LoginActivity", "User ID: ${user?.id}, Username: ${user?.username}, Email: ${user?.email}")
 
-                                // Navigate to different home pages based on user type
+                                // Here we navigate to different home pages based on the user type
                                 val intent = when (user?.usertype) {
                                     "Donor" -> {
-                                        Log.d("LoginActivity", "Navigating to DonorHomeActivity") //Add Log to debug the home pages
+                                        Log.d("LoginActivity", "Navigating to DonorHomeActivity") //An Log to debug the home pages
 
                                         Intent(this@Login, DonorHomeActivity::class.java)
                                     }
                                     "Recipient" -> {
-                                        Log.d("LoginActivity", "Navigating to RecipientHomeActivity") //Add Log to debug the home pages
+                                        Log.d("LoginActivity", "Navigating to RecipientHomeActivity") //An log to debug the home pages
                                         Intent(this@Login, RecipientHomeActivity::class.java)
                                     }
                                     else -> {
                                         Log.e("LoginActivity", "Unknown user type: ${user?.usertype}")
-                                        // Handle the error appropriately, e.g., navigate to a default home page
-                                        // or show an error message
-                                        null // Or handle the error as appropriate
+                                        null
                                     }
                                 }
 
                                 if (intent != null) {
                                     startActivity(intent)
-                                    finish() // Close the login activity
+                                    finish() // Closes the login activity
                                 } else {
-                                    // Handle the case where intent is null (e.g., unknown user type)
+                                    // Handle cases where intent is null, like unknown user type.
                                     Toast.makeText(this@Login, "Unknown user type", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } else {
-                            // Login failed
+                            // here we have if login as failed
                             val message = loginResponse.message
                             runOnUiThread {
                                 Toast.makeText(this@Login, message, Toast.LENGTH_SHORT).show()
@@ -114,7 +111,6 @@ class Login : AppCompatActivity() {
                             Log.e("LoginActivity", "Login failed: $message")
                         }
                     } else {
-                        // Handle null response body
                         runOnUiThread {
                             Toast.makeText(this@Login, "Login failed: Empty response", Toast.LENGTH_SHORT).show()
                             showMessage("Login failed: Empty response")
@@ -122,7 +118,6 @@ class Login : AppCompatActivity() {
                         Log.e("LoginActivity", "Login failed: Empty response")
                     }
                 } else {
-                    // Handle unsuccessful HTTP response
                     val message = response.message()
                     runOnUiThread {
                         Toast.makeText(this@Login, "Login failed: $message", Toast.LENGTH_SHORT).show()
@@ -133,7 +128,7 @@ class Login : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                // Handle network errors
+                // Handle for network errors
                 val errorMessage = t.message ?: "Network error"
                 runOnUiThread {
                     Toast.makeText(this@Login, "Login failed: $errorMessage", Toast.LENGTH_SHORT).show()
